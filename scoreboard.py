@@ -2,30 +2,34 @@ from turtle import Turtle
 ALIGNMENT = "center"
 FONT = ("Arial", 20, "normal")
 
-class Scoreboard(Turtle):
+with open("data.txt") as file:
+    contents = file.read()
+
+class ScoreBoard(Turtle):
 
     def __init__(self):
         super().__init__()
         self.goto(0, 320)
         self.score = 0
+        with open("data.txt") as data:
+            self.high_score = int(data.read())
         self.color("white")
-        self.updatescoreboard()
+        self.update_scoreboard()
         self.hideturtle()
 
-    def updatescoreboard(self):
-        self.write(f"Score: {self.score}", align=ALIGNMENT, font=FONT)
-
+    def update_scoreboard(self):
+        self.clear()
+        self.write(f"Score: {self.score} High Score {self.high_score}", align=ALIGNMENT, font=FONT)
 
     def increase_score(self):
-        self.clear()
         self.score += 1
-        self.updatescoreboard()
-
-    def you_lose(self):
         self.clear()
-        self.penup()
-        self.goto(0, 0)
-        self.color("red")
-        self.write(f"GAME OVER MAN!! WE'RE ALL FUCKED!!\n "
-                   f"YOU FUCKING LOST!! TRY AGAIN!!", align="center", font=FONT)
+        self.update_scoreboard()
 
+    def reset(self):
+        if self.score > self.high_score:
+            self.high_score = self.score
+            with open("data.txt", mode="w") as data:
+                data.write(f"{self.high_score}")
+        self.score = 0
+        self.update_scoreboard()
