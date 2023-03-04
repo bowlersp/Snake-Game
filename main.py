@@ -2,7 +2,7 @@ from turtle import Turtle, Screen
 import time
 from snake import Snake
 from food import Food
-from scoreboard import Scoreboard
+from scoreboard import ScoreBoard
 
 screen = Screen()
 screen.setup(width=700, height=700)
@@ -12,7 +12,8 @@ screen.tracer(0)
 
 snake = Snake()
 food = Food()
-scoreboard = Scoreboard()
+scoreboard = ScoreBoard()
+
 
 screen.listen()
 screen.onkey(snake.up,"Up")
@@ -33,17 +34,16 @@ while game_is_on:
         scoreboard.increase_score()
     #detect collision with wall.
     if snake.head.xcor() > 340 or snake.head.xcor() < -340 or snake.head.ycor() > 340 or snake.head.ycor() < -340:
-        game_is_on = False
-        scoreboard.you_lose()
-        print("YOU LOSE")
+        scoreboard.reset()
+        snake.reset()
+
+
     #detect collision with tail.
     for segment in snake.segments[1:]:
         if snake.head.distance(segment) < 10:
-            game_is_on = False
-            scoreboard.you_lose()
-    #if head collides with any segment in the tail:
-        #trigger game_over
-
+            scoreboard.reset()
+            snake.reset()
 
 screen.exitonclick()
+
 
